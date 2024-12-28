@@ -1,0 +1,36 @@
+{
+    "stocks": [
+        {
+            "ticker": "TSLA",
+            "company_name": "Tesla"
+        },
+        {
+            "ticker": "AAPL",
+            "company_name": "Apple"
+        },
+        {
+            "ticker": "NVDA",
+            "company_name": "NVIDIA"
+        },
+        {
+            "ticker": "AMZN",
+            "company_name": "Amazon"
+        },
+        {
+            "ticker": "MSFT",
+            "company_name": "Microsoft"
+        },
+        {
+            "ticker": "GOOG",
+            "company_name": "Google"
+        },
+        {
+            "ticker": "META",
+            "company_name": "Meta"
+        },
+        {
+            "ticker": "TSM",
+            "company_name": "TSMC"
+        }
+    ]
+}
