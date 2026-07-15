@@ -1,22 +1,20 @@
 import sqlite3
+import pandas as pd
+import yfinance as yf
+from datetime import datetime
 import os
 
 
-def initialize_database(db_path, companies_table, historical_data_table):
+def initialize_database(db_path, companies_table, historical_data_table, fundamentals_table, recommendations_table):
     """
-    初始化 SQLite 資料庫，包括創建母表和子表。
-
-    Args:
-        db_path (str): SQLite 資料庫檔案路徑。
-        companies_table (str): 公司資訊表名稱。
-        historical_data_table (str): 歷史數據表名稱。
+    初始化 SQLite 資料庫，包括創建母表、子表、基本面數據表和推薦數據表。
     """
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # 建立母表
+    # 公司基本資料表
     cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {companies_table} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +24,7 @@ def initialize_database(db_path, companies_table, historical_data_table):
     )
     """)
 
-    # 建立子表
+    # 歷史數據表
     cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {historical_data_table} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,6 +41,31 @@ def initialize_database(db_path, companies_table, historical_data_table):
     )
     """)
 
+    # 基本面數據表
+    cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {fundamentals_table} (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ticker TEXT NOT NULL,
+        market_cap REAL,
+        pe_ratio REAL,
+        eps REAL,
+        dividend_yield REAL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(ticker)
+    )
+    """)
+
+    # 推薦數據表
+    cursor.execute(f"""
+    CREATE TABLE IF NOT EXISTS {recommendations_table} (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ticker TEXT NOT NULL,
+        recommendation TEXT,
+        rating INTEGER,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
     conn.commit()
     conn.close()
-    print(f"Database initialized at {db_path} with tables '{companies_table}' and '{historical_data_table}'.")
+    print(f"Database initialized with tables: {companies_table}, {historical_data_table}, {fundamentals_table}, {recommendations_table}.")
